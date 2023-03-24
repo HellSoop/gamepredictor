@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+.idea/
+Scripts/
+Lib/
+media/
+templates/
+*/__pycache__/
+gpsc.txt
+db.sqlite3
+pyvenv.cfg
