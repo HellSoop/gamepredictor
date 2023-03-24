@@ -10,7 +10,7 @@ def get_characteristics(game):
 def get_closest(game_characteristics, k=3):
     '''Финаальная функция для получения названий игр'''
 
-    _, ind = tree.query([game_characteristics], k=k + 2)  # нахождение индексов игр
-    games = [games_iloc[i] for i in ind[0][1:]]  # нахождение игр в датафрейме
+    _, ind = tree.query([game_characteristics], k=k)  # нахождение индексов игр
+    games = [games_iloc[i] for i in ind[0]]  # нахождение игр в датафрейме
 
     return [g[1] for g in games]  # Возврат названий игр

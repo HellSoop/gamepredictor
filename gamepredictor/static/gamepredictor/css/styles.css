@@ -18,6 +18,14 @@
     font-size: 22px;
 }
 
+.icon-link {
+    display: block;
+    background: black;
+    color: #181818;
+    font-size: 10px;
+    text-decoration: none;
+}
+
 .games-space.left div label {
     padding-left: 20px;
 }
@@ -39,13 +47,18 @@
     height: 100%;
     max-width: 100%;
     margin: 0 auto;
-    background: #000000 no-repeat fixed;
+   /* background: #000000 no-repeat fixed; */
+   background-image: linear-gradient(0deg, #000, #424242 120%, #fff);
 }
 
 .gamepad {
     margin-bottom: -478px;
     background: #000000 url('../images/gamepad.png') no-repeat center;
-    background-size: 1400px 100%;
+    /* background-size: 1400px 100%; */
+
+    background-size: cover;
+    background-position: 50% 0;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,12 +119,16 @@
     font-size: 20px;
 }
 
+.link-space {
+    margin-top: -75px;
+}
+
 .continue-link {
-    display: block;
+    display: inline-block;
     background: #4171ff;
     border-radius: 10px;
     width: 120px;
-    margin: auto;
+    margin: 10px 150px;
     color: #2c2c2c;
     padding: 15px;
     text-decoration: none;
@@ -119,8 +136,7 @@
 }
 
 .continue-link.reset{
-    margin-top: 5px;
-    background: #9f0eec;
+    background: #b333f7;
 }
 
 .game {
@@ -134,7 +150,7 @@
 
 .game img {
     height: 100%;
-    max-height: 30vh;
+    max-height: 230px;
     max-width: 100%;
     border-radius: 10px;
 }
@@ -145,21 +161,22 @@
     font-style: normal;
     font-size: 25px;
     text-align: center;
+    height: 200px;
 }
 
 .res-game-text {
     display: inline-block;
     text-align: start;
-    width: 50vw;
-    height: 20vh;
+    width: 50%;
+    height: 100%;
 }
 
 
 .res-game-links {
     display: inline-block;
-    height: 20vh;
+    height: 100%;
     float: right;
-    width: 20vw;
+    width: 20%;
 }
 
 .res-game-link {
@@ -167,7 +184,7 @@
     padding: 5px;
     color: black;
     margin: 5px;
-    width: 20vw;
+    width: 100%;
     display: block;
     text-decoration: none;
 }
@@ -180,9 +197,14 @@
     background: #CF0060;
 }
 
+.res-game>p {
+    margin-left: 15px;
+}
+
 .res-game img {
     float: left;
     height: 100%;
-    max-height: 20vh;
+    max-height: 200px;
     max-width: 25vw;
+    border-radius: 10px
 }
