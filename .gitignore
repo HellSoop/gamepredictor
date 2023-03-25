@@ -5,6 +5,7 @@ Lib/
 media/
 templates/
 */__pycache__/
+.git/
 gpsc.txt
 db.sqlite3
 pyvenv.cfg
