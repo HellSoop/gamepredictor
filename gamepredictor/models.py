@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Games(models.Model):
     name = models.CharField(unique=True, max_length=255, verbose_name='Название игры')
@@ -32,3 +32,9 @@ class Games(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class GameUserExtension(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    previous_input = models.ManyToManyField(Games, null=True, related_name='previous_input', related_query_name='previous_input') # Предыдущий ввод пользователя
+    reported_games = models.ManyToManyField(Games, null=True, related_name='reported_games', related_query_name='reported_games') # Непонравившиеся игры
