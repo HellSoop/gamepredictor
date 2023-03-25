@@ -3,9 +3,9 @@
 Scripts/
 Lib/
 media/
-templates/
 */__pycache__/
 .git/
+gpsc.py
 gpsc.txt
 db.sqlite3
 pyvenv.cfg
