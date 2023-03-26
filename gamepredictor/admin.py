@@ -17,6 +17,7 @@ class UserExtension(admin.StackedInline):
     model = GameUserExtension
     can_delete = False
     verbose_name_plural = 'Пользователи'
+    filter_horizontal = ['previous_input', 'reported_games']
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
