@@ -61,3 +61,7 @@ class ReportView(FormView):
     def form_valid(self, form):
         print(form.cleaned_data)
         return redirect('home')
+
+
+def login_view(request):
+    return render(request, 'gamepredictor/login.html')
