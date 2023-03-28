@@ -44,7 +44,7 @@
 }
 
 .wrapper {
-    height: 100%;
+    min-height: 100vh;
     max-width: 100%;
     margin: 0 auto;
    /* background: #000000 no-repeat fixed; */
@@ -111,12 +111,21 @@
 }
 
 .login {
-    color: #25daff;
+    margin-bottom: -50px;
+    text-align: end;
+    padding: 7px 15px;
 }
 
 .login a {
     color: #25daff;
     font-size: 20px;
+    text-decoration: none;
+}
+
+.login b {
+    color: #25daff;
+    font-size: 20px;
+    text-decoration: none;
 }
 
 .link-space {

@@ -1,7 +1,9 @@
+from django.contrib.auth import logout, login
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, ListView, TemplateView
+from django.views.generic import FormView, ListView, TemplateView, CreateView
+from django.contrib.auth.views import LoginView
 
 from .models import *
 from .forms import *
@@ -56,12 +58,46 @@ class ReportView(FormView):
     form_class = ReportForm
     template_name = 'gamepredictor/report.html'
     success_url = reverse_lazy('home')
-    extra_context = {'title': 'Не понравилась игра'}
+
+    def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super().get_context_data(**kwargs)
+            return context | {'title': 'Не понравилась игра'}
+        else:
+            raise Http404
 
     def form_valid(self, form):
         print(form.cleaned_data)
         return redirect('home')
 
 
-def login_view(request):
-    return render(request, 'gamepredictor/login.html')
+class RegisterUser(CreateView):
+    form_class = RegiserForm
+    template_name = 'gamepredictor/register.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context | {'title': 'Регистрация'}
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'gamepredictor/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context | {'title': 'Вход'}
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')

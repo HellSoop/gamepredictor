@@ -66,16 +66,16 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
 }
 
 .sub-button {
-  position: static;
-  max-width: 120px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 39px;
-  padding-left: 39px;
-  clear: none;
-  border-radius: 20px;
-  background-color: #3f7baf;
-  transition: all 150ms ease;
+    position: static;
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 28px;
+    padding-left: 28px;
+     clear: none;
+    border-radius: 20px;
+    background-color: #3f7baf;
+    transition: all 150ms ease;
 }
 
 .sub-button:hover {
@@ -94,6 +94,9 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   border-style: solid;
   border-width: 2px;
   border-color: rgba(0, 0, 0, 0.81);
+  padding: 7px;
+  width: 240px;
+  margin-left: 35px;
   border-radius: 20px;
   background-color: hsla(0, 0%, 100%, 0.4);
   color: #fff7f7;

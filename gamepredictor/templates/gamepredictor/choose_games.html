@@ -1,10 +1,7 @@
 {% extends 'gamepredictor/base.html' %}
 
 {% block gamepad %}
-
-
 <div>
-    <p class="login" style="display: none"><a href="#">Войти</a> | <a href="#">Регистрация</a></p>
     <input id="games-search" class="games-search-bar" type="text" placeholder="Введите название игры"
     name="q"
     hx-get="{% url 'search_help' %}?g={{ get_g }}"

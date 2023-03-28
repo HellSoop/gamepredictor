@@ -16,15 +16,14 @@
         <div class="w-form">
             <form method="post" class="login-form">
                 {% csrf_token %}
-            <div>{{ form.non_field_errors }}</div>
                 {% for f in form %}
                     <p><label for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
                     <div>{{ f.errors }}</div>
                 {% endfor %}
-            <button type="submit" class="sub-button w-button">Войти</button>
+            <button type="submit" class="sub-button w-button">Зарегистрироваться</button>
             </form>
         </div>
-        <a href="{% url 'register' %}" class="password-recovery-link">Зарегистрироваться</a></div>
+</div>
 </div>
 <div class="img-space wf-section"></div>
 </body>

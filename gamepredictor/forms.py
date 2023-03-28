@@ -64,13 +64,18 @@ class ReportForm(forms.Form):
 
     def __init__(self, *args, **kwargs): # Всё это нужно, чтобы везде изначально было выбрано 'да'
         super().__init__(*args, **kwargs)
-    #
-    # class Meta:
-    #     model = Games
-    #     fields = ['shooter', 'rpg', 'story', 'gloominess', 'aesthetics', 'survival', 'fullness_of_world',
-    #               'creative_potential', 'fighting_system', 'puzzles', 'quests', 'moral', 'horror', 'action',
-    #               'emotionality', 'reality', 'atmosphere', 'difficulty']
-    #     widgets = {
-    #         'title': forms.TextInput(attrs={'class': 'form-input'}),
-    #         'content': forms.Textarea(attrs={'cols': 60, 'rows': 10})
-    #     }
+
+
+class RegiserForm(UserCreationForm):
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+
+class LoginUserForm(AuthenticationForm):
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
