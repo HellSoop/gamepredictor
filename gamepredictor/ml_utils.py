@@ -1,4 +1,5 @@
-from .ml_model import tree, games_iloc
+from .ml_model import tree, games_iloc, max_k
+
 
 def get_characteristics(game):
     return [game.shooter, game.rpg, game.story, game.gloominess, game.aesthetics,
@@ -7,10 +8,12 @@ def get_characteristics(game):
                             game.moral, game.horror, game.action, game.emotionality, game.reality,
                             game.atmosphere]
 
+
 def get_closest(game_characteristics, k=3):
     '''Финаальная функция для получения названий игр'''
-
+    if k > max_k:
+        k = max_k
     _, ind = tree.query([game_characteristics], k=k)  # нахождение индексов игр
     games = [games_iloc[i] for i in ind[0]]  # нахождение игр в датафрейме
-
-    return [g[1] for g in games]  # Возврат названий игр
+    res = [g[1] for g in games]
+    return res  # Возврат названий игр

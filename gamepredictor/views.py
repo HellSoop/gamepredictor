@@ -1,4 +1,5 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -28,8 +29,10 @@ def get_user_interests(games_titles):
     games = [ml_utils.get_characteristics(Games.objects.get(name=g)) for g in games_titles]
     users_interests = []  # предыдущая строка создаёт списко со списками с характеристиками каждой игры в запросе
     for i in range(len(games[0])):
+        # вычисление среднего значения каждой харатеритики
         users_interests.append(sum([g[i] for g in games]) / len(games))
-    res_games = [Games.objects.get(name=g) for g in ml_utils.get_closest(users_interests, 3) if not g in games_titles]
+    predicted_games = [g for g in ml_utils.get_closest(users_interests, 3 + len(games_titles)) if not g in games_titles][:3]
+    res_games = [Games.objects.get(name=g) for g in predicted_games if not g in games_titles]
     # в предыдущей строке по названиям игр ищутся их объекты в базе данных
     return res_games
 
@@ -54,17 +57,18 @@ def search_view(request):
     return render(request, 'gamepredictor/search-help.html', context={'titles': titles, 'games': games})
 
 
-class ReportView(FormView):
+def report_view(request, game_slug):
+    pass
+
+
+class ReportView(LoginRequiredMixin, FormView):
     form_class = ReportForm
     template_name = 'gamepredictor/report.html'
     success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
-        if self.request.user.is_authenticated:
-            context = super().get_context_data(**kwargs)
-            return context | {'title': 'Не понравилась игра'}
-        else:
-            raise Http404
+        context = super().get_context_data(**kwargs)
+        return context | {'title': 'Не понравилась игра'}
 
     def form_valid(self, form):
         print(form.cleaned_data)
