@@ -7,6 +7,9 @@
     hx-get="{% url 'search_help' %}?g={{ get_g }}"
     hx-trigger="keyup changed delay:150ms"
     hx-target="#search-help">
+    {% if request.user.is_authenticated and request.user.gameuserextension.previous_input.all %}
+        <a class="continue-link previous" href="{% url 'home' %}?g={{ previous }}"><b>Последние</b></a>
+    {% endif %}
     <div id="search-help"></div>
 </div>
 {% endblock %}
@@ -14,6 +17,7 @@
 {% block content %}
 <div class="link-space">
     <a class="continue-link reset" href="{% url 'home' %}"><b>Сбросить</b></a>
+
     <a class="continue-link" href="{% url 'result' %}?g={{ get_g }}"><b>Продолжить</b></a>
 </div>
 {% for g in games %}

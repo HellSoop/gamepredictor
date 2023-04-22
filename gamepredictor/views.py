@@ -22,8 +22,13 @@ class HomeView(TemplateView):
         games = []
         if get_games:
             for t in set(get_games.split(',')):
-                games += Games.objects.filter(name__iregex=t)
-        return {'title': 'Главная страница', 'get_g': get_games, 'games': games}
+                games += Games.objects.filter(name=t)
+        previous = '#'
+        if self.request.user.is_authenticated:
+            previous_games_titles = [g.name for g in self.request.user.gameuserextension.previous_input.all()]
+            previous = ','.join(previous_games_titles)
+            print(previous)
+        return {'title': 'Главная страница', 'get_g': get_games, 'games': games, 'previous': previous}
 
 
 def get_user_interests(games_titles):
@@ -46,7 +51,11 @@ class ResultView(TemplateView):
         if self.request.GET.get('g') == '':
             return Http404
         games_titles = set(self.request.GET.get('g').split(','))
-        return {'title': 'Результаты', 'games': get_user_interests(games_titles)}
+        games = get_user_interests(games_titles)
+        if self.request.user.is_authenticated:
+            self.request.user.gameuserextension.previous_input.clear()
+            self.request.user.gameuserextension.previous_input.add(*[Games.objects.get(name=g) for g in games_titles])
+        return {'title': 'Результаты', 'games': games}
 
 
 def search_view(request):

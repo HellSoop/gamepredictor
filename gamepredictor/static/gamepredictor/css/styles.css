@@ -135,17 +135,24 @@
 .continue-link {
     display: inline-block;
     background: #4171ff;
-    border-radius: 10px;
-    width: 120px;
+    border-radius: 15px;
     margin: 10px 150px;
     color: #2c2c2c;
-    padding: 15px;
+    padding: 15px 20px;
     text-decoration: none;
     font-size: 20px;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .continue-link.reset{
     background: #b333f7;
+}
+
+.continue-link.previous{
+    background: #5ab6c4;
+    margin: 0px;
+    font-size: 15px;
 }
 
 .game {
