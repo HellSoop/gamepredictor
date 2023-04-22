@@ -59,10 +59,6 @@ def search_view(request):
     return render(request, 'gamepredictor/search-help.html', context={'titles': titles, 'games': games})
 
 
-def report_view(request, game_slug):
-    pass
-
-
 class ReportView(LoginRequiredMixin, FormView):
     form_class = ReportForm
     template_name = 'gamepredictor/report.html'
