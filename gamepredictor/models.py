@@ -24,6 +24,7 @@ class Games(models.Model):
     atmosphere = models.IntegerField()
 
     cover = models.ImageField(null=True, verbose_name='Обложка')
+    slug = models.SlugField(unique=True, db_index=True, verbose_name='URL')
 
     class Meta:
         verbose_name = 'Игра'

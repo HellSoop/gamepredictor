@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="games-space left">
-    <form method="post", action="{% url 'report' game_slug='ror' %}">
+    <form method="post", action="#">
         {% csrf_token %}
 
         {{ form.as_p }}
