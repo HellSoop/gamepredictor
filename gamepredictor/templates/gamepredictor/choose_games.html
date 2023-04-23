@@ -17,7 +17,6 @@
 {% block content %}
 <div class="link-space">
     <a class="continue-link reset" href="{% url 'home' %}"><b>Сбросить</b></a>
-
     <a class="continue-link" href="{% url 'result' %}?g={{ get_g }}"><b>Продолжить</b></a>
 </div>
 {% for g in games %}
