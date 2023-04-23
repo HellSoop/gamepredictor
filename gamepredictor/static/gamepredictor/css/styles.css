@@ -224,3 +224,10 @@
     max-width: 25vw;
     border-radius: 10px
 }
+
+.return-link {
+    color: #888888;
+    text-decoration: none;
+    font-size: 23px;
+    padding: 15px;
+}

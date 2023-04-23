@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import FormView, ListView, TemplateView, CreateView
+from django.views.generic import FormView, TemplateView, CreateView
 from django.contrib.auth.views import LoginView
 
 from .models import *
@@ -11,7 +11,7 @@ from .forms import *
 from . import ml_utils
 from . import ml_model
 
-rep_counter = ml_utils.ReportCounter(10)
+rep_counter = ml_utils.ReportCounter(10)  # Создание обработчика оценок, назначение длины очереди
 
 
 class HomeView(TemplateView):
@@ -33,11 +33,7 @@ class HomeView(TemplateView):
 
 def get_user_interests(games_titles):
     '''Не является представлением. Инкапсулирует выбор игр из базы по интересам пользователя.'''
-    games = ml_utils.get_interest_points([Games.objects.get(name=g) for g in games_titles])
-    users_interests = []  # предыдущая строка создаёт списко со списками с характеристиками каждой игры в запросе
-    for i in range(len(games[0])):
-        # вычисление среднего значения каждой харатеритики
-        users_interests.append(sum([g[i] for g in games]) / len(games))
+    users_interests = ml_utils.get_interest_points([Games.objects.get(name=g) for g in games_titles])
     predicted_games = [g for g in ml_utils.get_closest(users_interests, 3 + len(games_titles)) if not g in games_titles][:3]
     res_games = [Games.objects.get(name=g) for g in predicted_games if not g in games_titles]
     # в предыдущей строке по названиям игр ищутся их объекты в базе данных

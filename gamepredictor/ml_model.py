@@ -10,4 +10,15 @@ games = pd.read_sql('select * from gamepredictor_games', con)  # Создани�
 max_k = len(games)  # Нужен будет в ml_utils для избежания ошибок
 games_iloc = games.iloc()
 X = [g.drop(['id', 'name', 'cover', 'slug']) for g in games_iloc]
-tree = BallTree(X, leaf_size=2)
+tree = BallTree(X, leaf_size=8)
+
+
+def update_model():
+    global games, max_k, games_iloc, X, tree
+
+    con = sqlite3.connect(str(db_dir) + '/' + 'db.sqlite3')
+    games = pd.read_sql('select * from gamepredictor_games', con)
+    max_k = len(games)
+    games_iloc = games.iloc()
+    X = [g.drop(['id', 'name', 'cover', 'slug']) for g in games_iloc]
+    tree = BallTree(X, leaf_size=8)

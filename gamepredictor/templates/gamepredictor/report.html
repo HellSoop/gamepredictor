@@ -5,6 +5,7 @@
 {% endblock gamepad %}
 
 {% block content %}
+     <p style="text-align: left"><b><a class="return-link" href="{% url 'home' %}">На главную</a></b></p>
 <div class="games-space left">
     <form method="post", action="#">
         {% csrf_token %}

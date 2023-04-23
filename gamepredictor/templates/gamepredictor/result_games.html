@@ -1,6 +1,7 @@
 {% extends 'gamepredictor/base.html' %}
 
 {% block content %}
+    <p style="text-align: left"><b><a class="return-link" href="{% url 'home' %}">На главную</a></b></p>
     <ul>
     {% for g in games %}
         <li class="res-game">
