@@ -27,28 +27,44 @@ class HomeView(TemplateView):
         if self.request.user.is_authenticated:
             previous_games_titles = [g.name for g in self.request.user.gameuserextension.previous_input.all()]
             previous = ','.join(previous_games_titles)
-            print(previous)
         return {'title': 'Главная страница', 'get_g': get_games, 'games': games, 'previous': previous}
 
 
 def get_user_interests(games_titles):
     '''Не является представлением. Инкапсулирует выбор игр из базы по интересам пользователя.'''
-    users_interests = ml_utils.get_interest_points([Games.objects.get(name=g) for g in games_titles])
-    predicted_games = [g for g in ml_utils.get_closest(users_interests, 3 + len(games_titles)) if not g in games_titles][:3]
-    res_games = [Games.objects.get(name=g) for g in predicted_games if not g in games_titles]
-    # в предыдущей строке по названиям игр ищутся их объекты в базе данных
+    # Получение точек интересов пользователей
+    games = [Games.objects.get(name=g) for g in games_titles]
+    ids = [g.id for g in games]
+    users_interests = ml_utils.get_interest_points(games)
+    predicted_games = ml_utils.get_closest(users_interests, 3 + len(games_titles))
+    # Поиск игр по id в базе данных и фильтрация результата по id
+    res_games = [Games.objects.get(pk=g) for g in predicted_games if not g in ids][:3]
+
     return res_games
 
 
 class ResultView(TemplateView):
     template_name = 'gamepredictor/result_games.html'
+    result_counter = 0
+    check_delay = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         if self.request.GET.get('g') == '':
             return Http404
-        games_titles = set(self.request.GET.get('g').split(','))
+
+        ResultView.result_counter += 1
+        if ResultView.result_counter >= ResultView.check_delay:
+            # Если игры с большим id нет, значит модель актуальна
+            try:
+                Games.objects.get(pk__gt=ml_utils.games_iloc[-1].id)
+                ml_utils.update_model()
+                ResultView.result_counter = 0
+            except Games.DoesNotExist:
+                pass
+
+        games_titles = set(self.request.GET.get('g').split(','))  #
         games = get_user_interests(games_titles)
-        if self.request.user.is_authenticated:
+        if self.request.user.is_authenticated:  # Сохранение ввода пользователя
             self.request.user.gameuserextension.previous_input.clear()
             self.request.user.gameuserextension.previous_input.add(*[Games.objects.get(name=g) for g in games_titles])
         return {'title': 'Результаты', 'games': games}

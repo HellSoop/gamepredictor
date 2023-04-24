@@ -1,14 +1,27 @@
-from .ml_model import tree, games_iloc, max_k, update_model
+from .ml_model import *
+
+
+def update_model():
+    global games, max_k, games_iloc, X, tree
+
+    games = get_games_from_db()
+    max_k = len(games)
+    games_iloc = games.iloc
+    X = [g.drop(['id']) for g in games_iloc]
+    tree = BallTree(X, leaf_size=8)
+
+
+def get_characteristics(game):
+    return [game.shooter, game.rpg, game.story, game.gloominess, game.aesthetics,
+            game.survival, game.fullness_of_world, game.creative_potential,
+            game.fighting_system, game.puzzles, game.quests, game.difficulty,
+            game.moral, game.horror, game.action, game.emotionality, game.reality,
+            game.atmosphere]
 
 
 def get_interest_points(games_list: list) -> list:
-    games_characteristics_list = []
-    for game in games_list:
-        games_characteristics_list.append([game.shooter, game.rpg, game.story, game.gloominess, game.aesthetics,
-                                           game.survival, game.fullness_of_world, game.creative_potential,
-                                           game.fighting_system, game.puzzles, game.quests, game.difficulty,
-                                           game.moral, game.horror, game.action, game.emotionality, game.reality,
-                                           game.atmosphere])  # вычисление всех характеристик игры
+    # вычисление всех характеристик игры
+    games_characteristics_list = [get_characteristics(game) for game in games_list]
     characteristics_count = len(games_characteristics_list[0])
     l_games = len(games_list)
     games_mean = []  # вычисление среднего значения всех характеристик игр
@@ -67,6 +80,4 @@ def get_closest(game_characteristics, k=3):
     if k > max_k:
         k = max_k
     _, ind = tree.query(game_characteristics, k=k)  # нахождение индексов игр
-    games = [games_iloc[i] for i in ind[0]]  # нахождение игр в датафрейме
-    res = [g[1] for g in games]
-    return res  # Возврат названий игр
+    return [games_iloc[i].id for i in ind[0]]  # Возврат id игр
