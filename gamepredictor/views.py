@@ -9,7 +9,7 @@ from django.contrib.auth.views import LoginView
 from .models import *
 from .forms import *
 from . import ml_utils
-from . import ml_model
+
 
 rep_counter = ml_utils.ReportCounter(10)  # Создание обработчика оценок, назначение длины очереди
 
@@ -38,7 +38,7 @@ def get_user_interests(games_titles):
     users_interests = ml_utils.get_interest_points(games)
     predicted_games = ml_utils.get_closest(users_interests, 3 + len(games_titles))
     # Поиск игр по id в базе данных и фильтрация результата по id
-    res_games = [Games.objects.get(pk=g) for g in predicted_games if not g in ids][:3]
+    res_games = [Games.objects.get(pk=g) for g in predicted_games if g not in ids][:3]
 
     return res_games
 
@@ -46,7 +46,7 @@ def get_user_interests(games_titles):
 class ResultView(TemplateView):
     template_name = 'gamepredictor/result_games.html'
     result_counter = 0
-    check_delay = 10
+    check_delay = 25
 
     def get_context_data(self, *, object_list=None, **kwargs):
         if self.request.GET.get('g') == '':
@@ -87,7 +87,8 @@ class ReportView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        game = get_object_or_404(Games, slug=self.kwargs['game_slug'])  # Вызовет ошибку 404, если игры нет в базе данных
+        # Вызовет ошибку 404, если игры нет в базе данных
+        game = get_object_or_404(Games, slug=self.kwargs['game_slug'])
         if game in self.request.user.gameuserextension.reported_games.all():
             raise Http404  # Вызовет ошибку 404, если обработчик не внёс предыдущий результат в базу данных
         return context | {'title': 'Не понравилась игра'}
