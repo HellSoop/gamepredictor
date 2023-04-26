@@ -10,3 +10,7 @@ gpsc.py
 gpsc.txt
 db.sqlite3
 pyvenv.cfg
+
+passenger_wsgi.py
+.htaccess
+db.json

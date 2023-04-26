@@ -30,13 +30,17 @@ class HomeView(TemplateView):
         return {'title': 'Главная страница', 'get_g': get_games, 'games': games, 'previous': previous}
 
 
-def get_user_interests(games_titles):
+def get_user_interests(games_titles, user):
     '''Не является представлением. Инкапсулирует выбор игр из базы по интересам пользователя.'''
     # Получение точек интересов пользователей
     games = [Games.objects.get(name=g) for g in games_titles]
     ids = [g.id for g in games]
+    try:
+        ids += [g.id for g in user.gameuserextension.reported_games.all()]
+    except AttributeError:
+        print('User is not authenticated')
     users_interests = ml_utils.get_interest_points(games)
-    predicted_games = ml_utils.get_closest(users_interests, 3 + len(games_titles))
+    predicted_games = ml_utils.get_closest(users_interests, 3 + len(ids))
     # Поиск игр по id в базе данных и фильтрация результата по id
     res_games = [Games.objects.get(pk=g) for g in predicted_games if g not in ids][:3]
 
@@ -50,7 +54,7 @@ class ResultView(TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         if self.request.GET.get('g') == '':
-            return Http404
+            raise Http404
 
         ResultView.result_counter += 1
         if ResultView.result_counter >= ResultView.check_delay:
@@ -63,7 +67,8 @@ class ResultView(TemplateView):
                 pass
 
         games_titles = set(self.request.GET.get('g').split(','))  #
-        games = get_user_interests(games_titles)
+        games = get_user_interests(games_titles, self.request.user)
+
         if self.request.user.is_authenticated:  # Сохранение ввода пользователя
             self.request.user.gameuserextension.previous_input.clear()
             self.request.user.gameuserextension.previous_input.add(*[Games.objects.get(name=g) for g in games_titles])
