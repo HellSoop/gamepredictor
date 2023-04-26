@@ -38,7 +38,7 @@ def get_user_interests(games_titles, user):
     try:
         ids += [g.id for g in user.gameuserextension.reported_games.all()]
     except AttributeError:
-        print('User is not authenticated')
+        pass
     users_interests = ml_utils.get_interest_points(games)
     predicted_games = ml_utils.get_closest(users_interests, 3 + len(ids))
     # Поиск игр по id в базе данных и фильтрация результата по id
