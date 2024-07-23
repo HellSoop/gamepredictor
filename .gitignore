@@ -4,7 +4,7 @@ Scripts/
 Lib/
 venv/
 media/
-*/__pycache__/
+__pycache__/
 .git/
 gpsc.py
 gpsc.txt
